@@ -1,10 +1,11 @@
 package com.casaba.lab8;
 
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import org.springframework.stereotype.Component;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.stereotype.Controller;
 
-@Component
-public class ProductMutationController implements GraphQLMutationResolver {
+@Controller
+public class ProductMutationController {
 
     private final ProductService productService;
 
@@ -12,21 +13,24 @@ public class ProductMutationController implements GraphQLMutationResolver {
         this.productService = productService;
     }
 
-    public Product createProduct(ProductInput product) {
+    @MutationMapping
+    public Product createProduct(@Argument ProductInput product) {
         Product newProduct = new Product();
         newProduct.setName(product.getName());
         newProduct.setPrice(product.getPrice());
         return productService.createProduct(newProduct);
     }
 
-    public Product updateProduct(Long id, ProductInput product) {
+    @MutationMapping
+    public Product updateProduct(@Argument Long id, @Argument ProductInput product) {
         Product updated = new Product();
         updated.setName(product.getName());
         updated.setPrice(product.getPrice());
         return productService.updateProduct(id, updated);
     }
 
-    public boolean deleteProduct(Long id) {
+    @MutationMapping
+    public boolean deleteProduct(@Argument Long id) {
         return productService.deleteProduct(id);
     }
 }
